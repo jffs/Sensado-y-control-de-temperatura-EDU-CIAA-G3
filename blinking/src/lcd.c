@@ -1,3 +1,10 @@
+/*
+ * lcd.c
+ *
+ *  Created on: 01/12/2015
+ *      
+ */
+
 /**************************************************************************
 //* Basic Character LCD functions
 //* By Fábio Pereira
@@ -5,7 +12,7 @@
 //**************************************************************************
  * 
  */
-#include "chip.h"
+ #include "chip.h"
 #include "lcd.h"
 
 union ubyte
@@ -34,6 +41,13 @@ static char lcd_mode;
 //* unsigned char time: aproximate delay time in microseconds
 //**************************************************************************
 void lcd_InitIO(void){
+	/*Chip_SCU_PinMux(4,LCD_D4 , SCU_MODE_INACT | SCU_MODE_ZIF_DIS, SCU_MODE_FUNC2);
+	Chip_SCU_PinMux(4,LCD_D5, SCU_MODE_INACT | SCU_MODE_ZIF_DIS, SCU_MODE_FUNC2);
+	Chip_SCU_PinMux(4,LCD_D6, SCU_MODE_INACT | SCU_MODE_ZIF_DIS, SCU_MODE_FUNC2);
+	Chip_SCU_PinMux(4,LCD_D7, SCU_MODE_INACT | SCU_MODE_ZIF_DIS, SCU_MODE_FUNC2);
+	Chip_SCU_PinMux(4,LCD_RS, SCU_MODE_INACT | SCU_MODE_ZIF_DIS, SCU_MODE_FUNC2);
+	Chip_SCU_PinMux(4,LCD_ENABLE, SCU_MODE_INACT | SCU_MODE_ZIF_DIS, SCU_MODE_FUNC2);
+	*/
 	// Configure the pins function
 		 Chip_SCU_PinMux(LCD_PORT,LCD_D4,SCU_MODE_INACT|SCU_MODE_ZIF_DIS,FUNC0);//SCU_MODE_INACT=Desactivo pull-down y pull-up
 		 Chip_SCU_PinMux(LCD_PORT,LCD_D5,SCU_MODE_INACT|SCU_MODE_ZIF_DIS,FUNC0);//SCU_MODE_ZIF_DIS=Disable input glitch filter
@@ -70,7 +84,13 @@ void LCD_send_nibble(char data)
 {
 	union ubyte my_union;
 	my_union._byte = data;
-
+	/*// Output the four data bits
+	LCD_D4 = my_union.bit.b0;
+	LCD_D5 = my_union.bit.b1;
+	LCD_D6 = my_union.bit.b2;
+	LCD_D7 = my_union.bit.b3;*/
+	// pulse the LCD enable line
+	//LCD_ENABLE = 1;
 	Chip_GPIO_SetPinState(LPC_GPIO_PORT,2,LCD_D4_gpioPin,my_union.bit.b0);//LCD4 -> b0
 	Chip_GPIO_SetPinState(LPC_GPIO_PORT,2,LCD_D5_gpioPin,my_union.bit.b1);//LCD5 -> b1
 	Chip_GPIO_SetPinState(LPC_GPIO_PORT,2,LCD_D6_gpioPin,my_union.bit.b2);//LCD6 -> b2
@@ -92,12 +112,12 @@ void LCD_send_byte(char address, char data)
 {
   unsigned int temp;
 	if(address==0)
-		// config the R/S line
+		//LCD_RS = 0;               // config the R/S line
 		Chip_GPIO_SetPinState(LPC_GPIO_PORT,5,LCD_RS_gpioPin,0);//LCD_RS -> 0, config the R/S line
 	else
-	
+		//LCD_RS = 1;
 		Chip_GPIO_SetPinState(LPC_GPIO_PORT,5,LCD_RS_gpioPin,1);//LCD_RS -> 1, config the R/S line
-		// set LCD enable line to 0
+		//LCD_ENABLE = 0;                 // set LCD enable line to 0
 		Chip_GPIO_SetPinState(LPC_GPIO_PORT,5,LCD_EN_gpioPin,0);//LCD_ENABLE -> 0
 		LCD_send_nibble(data >> 4);     // send the higher nibble
 		LCD_send_nibble(data & 0x0f);   // send the lower nibble

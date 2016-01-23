@@ -1,5 +1,15 @@
+/*
+ * lcd.c
+ *
+ *  Created on: 01/12/2015
+ *      
+ */
+
 #ifndef LCD_H_
 #define LCD_H_
+
+
+
 
 // The following defines set the default pins for the LCD display
 #ifndef LCD_ENABLE			 // if lcd_enable is not defined
