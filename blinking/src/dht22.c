@@ -57,9 +57,8 @@ byte leer_datos_dht(){
 
 void leer_dht22_pin (float dhthum, float dhttemp){
    //byte GlobalErr=0;
-   byte dht22_pin_in, i, dht22_pin_checksum, buffer1=0,buffer2=0,buffer3=0,buffer4=0;
-   int16_t temperatura, humedad;
-   float temp,hum;
+   byte dht22_pin_in, i, dht22_pin_checksum;
+  
    
    //dht_io=0; // configurar el pin como salida
    Chip_GPIO_SetPinState(LPC_GPIO_PORT,dht22_gpioPort,dht22_gpioPin,0);//dth22 -> 0
@@ -112,20 +111,11 @@ void leer_dht22_pin (float dhthum, float dhttemp){
       printf("\r\nDHT checksum error");
    }
    
-   buffer1 = dht22_pin_dat[0]<<8;
-   buffer2 = dht22_pin_dat[1]>>8;
-   buffer3 = dht22_pin_dat[2]<<8;
-   buffer4 = dht22_pin_dat[3]>>8;
-   humedad = buffer1 | buffer2;
-   temperatura = buffer1 | buffer2;
-   //humedad = make16(dht22_pin_dat[0],dht22_pin_dat[1]);
-   //temperatura = make16(dht22_pin_dat[2],dht22_pin_dat[3]);
-   
-   hum = humedad;
-   temp = temperatura;
-   
-   dhthum = (hum)/10;
-   dhttemp = (temp)/10;
+   dhthum  = (float)dht22_pin_dat[0] * 256 + (float)dht22_pin_dat[1];
+   dhthum  /= 10;
+   dhttemp = (float)(dht22_pin_dat[2] & 0x7F)* 256 + (float)dht22_pin_dat[3];
+   dhttemp /= 10.0;
+   if ((dht22_pin_dat[2] & 0x80) != 0)  dhttemp *= -1;
 }
 
 float leerTemperatura() {
