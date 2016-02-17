@@ -8,7 +8,9 @@
 #ifndef LCD_H_
 #define LCD_H_
 
-
+/** @file lcd.h
+ *  @brief LCD header file
+ **/
 
 
 // The following defines set the default pins for the LCD display
@@ -76,5 +78,8 @@ void LCD_cursor_off(void);
 void LCD_cursor_blink_on(void);
 void LCD_cursor_blink_off(void);
 
-
+/** @} doxygen end group definition */
+/** @} doxygen end group definition */
+/** @} doxygen end group definition */
+/*==================[end of file]============================================*/
 #endif /* LCD_H_ */

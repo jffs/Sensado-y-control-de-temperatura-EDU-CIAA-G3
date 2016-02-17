@@ -1,5 +1,12 @@
+
+/** @file lcd.c
+ *  @brief lcd library
+ *
+ */
+/*==================[inclusions]=============================================*/
 #include "chip.h"
 #include "lcd.h"
+
 
 union ubyte
 {
@@ -203,3 +210,8 @@ void LCD_cursor_blink_off(void)
 	lcd_mode &= 0b11111110;
 	LCD_send_byte (0,lcd_mode);
 }
+
+/** @} doxygen end group definition */
+/** @} doxygen end group definition */
+/** @} doxygen end group definition */
+/*==================[end of file]============================================*/

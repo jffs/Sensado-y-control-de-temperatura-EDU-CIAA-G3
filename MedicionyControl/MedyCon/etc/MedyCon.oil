@@ -1,0 +1,100 @@
+/*****************************************************************************/
+/*  MedyCon OIL configuration file                                  */
+/*                                                                           */
+/*  This file describes the current OSEK configuration.                      */
+/*  References:                                                              */
+/*  - OSEK OS standard: http://portal.osek-vdx.org/files/pdf/specs/os223.pdf */
+/*  - OSEK OIL standard: http://portal.osek-vdx.org/files/pdf/specs/oil25.pdf*/
+/*****************************************************************************/
+
+OSEK OSEK {
+
+   OS	ExampleOS {
+      STATUS = EXTENDED;
+      ERRORHOOK = TRUE;
+      PRETASKHOOK = FALSE;
+      POSTTASKHOOK = FALSE;
+      STARTUPHOOK = FALSE;
+      SHUTDOWNHOOK = FALSE;
+      USERESSCHEDULER = FALSE;
+      MEMMAP = FALSE;
+   };
+
+   RESOURCE = POSIXR;
+
+   EVENT = POSIXE;
+
+   APPMODE = AppMode1;
+
+   TASK InitTask {
+      PRIORITY = 1;
+      ACTIVATION = 1;
+      AUTOSTART = TRUE {
+         APPMODE = AppMode1;
+      }
+      STACK = 512;
+      TYPE = EXTENDED;
+      SCHEDULE = NON;
+      RESOURCE = POSIXR;
+      EVENT = POSIXE;
+   }
+
+   TASK PeriodicTask {
+      PRIORITY = 2;
+      ACTIVATION = 1;
+      STACK = 512;
+      TYPE = EXTENDED;
+      SCHEDULE = NON;
+      RESOURCE = POSIXR;
+      EVENT = POSIXE;
+   }
+
+   ALARM ActivatePeriodicTask {
+      COUNTER = HardwareCounter;
+      ACTION = ACTIVATETASK {
+         TASK = PeriodicTask;
+      }
+   }
+
+   COUNTER HardwareCounter {
+      MAXALLOWEDVALUE = 1000;
+      TICKSPERBASE = 1;
+      MINCYCLE = 1;
+      TYPE = HARDWARE;
+      COUNTER = HWCOUNTER0;
+   };
+
+	TASK SwitchesTask {
+	PRIORITY = 2;
+	ACTIVATION = 1;
+	STACK = 512;
+	TYPE = EXTENDED;
+	SCHEDULE = NON;
+	RESOURCE = POSIXR;
+	EVENT = POSIXE;
+	}
+	
+   ALARM ActivateSwitchesTask {
+	COUNTER = HardwareCounter;
+	ACTION = ACTIVATETASK {
+	TASK = SwitchesTask;
+	}
+   }
+    
+    TASK ReadTask {
+	PRIORITY = 2;
+	ACTIVATION = 1;
+	STACK = 512;
+	TYPE = EXTENDED;
+	SCHEDULE = NON;
+	RESOURCE = POSIXR;
+	EVENT = POSIXE;
+	}
+	
+   ALARM ActivateReadTask {
+	COUNTER = HardwareCounter;
+	ACTION = ACTIVATETASK {
+	TASK = ReadTask;
+	}
+   } 
+};
