@@ -2,7 +2,7 @@
  * lcd.c
  *
  *  Created on: 01/12/2015
- *      
+ *
  */
 
 #ifndef LCD_H_
@@ -29,7 +29,7 @@
 
 #define LCD_D7          10    // LCD data D4 pin
 
-#define LCD_PORT		4 
+#define LCD_PORT		4
 
 #define LCD_EN_gpioPin	13
 
